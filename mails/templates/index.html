@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+	<title>Homepage</title>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  <div class="container container-fluid">
+	    <a class="navbar-brand" href="#">Mail Parser</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarNav">
+	      <!-- <ul class="navbar-nav">
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="#">Home</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">Features</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">Pricing</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+	        </li>
+	      </ul> -->
+	    </div>
+	  </div>
+	</nav>
+	<div class="container">
+		<form class="mt-5 d-flex">
+			<input class="bg-light form-control me-2" type="search" placeholder="Search" aria-label="Search">
+			<button class="btn btn-outline-secondary" type="submit">Search</button>
+		</form>
+		<div class="mt-5 d-flex justify-content-between">
+			<div class="">
+				<button class="btn btn-outline-primary" onClick="uploadFile()">Filters</button>
+			</div>
+			<div class="mb-3">
+			  <label for="formFile" class="form-label">New Mail</label>
+			  <input id="file_input" class="form-control btn btn-outline-primary" type="file" id="formFile">
+			</div>
+		</div>
+		<div class="mt-5">
+			<table class="table">
+				<thead>
+				<tr>
+					<th scope="col">Date</th>
+					<th scope="col">From</th>
+					<th scope="col">pro Number</th>
+					<th scope="col">Loaded miles</th>
+					<th scope="col">Pick up: <br> Delivery:</th>
+					<th scope="col">additional stops</th>
+					<th scope="col">vehicle size</th>
+					<th scope="col">Max pieces</th>
+					<th scope="col">Max weight</th>
+	  				<th scope="col">Dimensions</th>
+					<th scope="col">stackable</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for mail in mails %}
+				<tr>
+				  <td>{{mail.date}}</td>
+				  <td>{{mail.source_email}}</td>
+				  <td>{{mail.pro_number}}</td>
+				  <td>{{mail.loaded_miles}}</td>
+				  <td>{{mail.pickup}}</td>
+				  <td>{{mail.no_of_additional_stops}}</td>
+				  <td>{{mail.vehicle_size}}</td>
+				  <td>{{mail.max_pieces}}</td>
+				  <td>{{mail.max_weight}}</td>
+				  <td>{{mail.dimensions}}</td>
+				  <td>{{mail.stackable}}</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<script type="text/javascript">
+		function getCookie(name) {
+		 let cookieValue = null;
+		 if (document.cookie && document.cookie !== '') {
+			 const cookies = document.cookie.split(';');
+			 for (let i = 0; i < cookies.length; i++) {
+				 const cookie = cookies[i].trim();
+				 // Does this cookie string begin with the name we want?
+				 if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					 break;
+				 }
+			 }
+		 }
+		 return cookieValue;
+		}
+		var uploadFile = function(){
+			url = "/upload/"
+			file_input = document.getElementById('file_input')
+			var file = file_input.files[0]
+			console.log(file)
+
+			var formData = new FormData()
+			formData.append('file', file)
+			console.log(formData)
+
+			fetch(url, {
+				method: 'POST',
+				body: formData,
+				headers: {
+					"X-CSRFToken": getCookie("csrftoken"),
+				    'Accept': 'application/json'
+				}
+				}).then((response) => {
+					return response.json()
+				}).then((res) => {
+				if (res.status === 201) {
+				    console.log("Post successfully created!")
+				}
+				}).catch((error) => {
+					console.log(error)
+			})
+		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
