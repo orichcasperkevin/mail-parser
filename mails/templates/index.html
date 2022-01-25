@@ -12,7 +12,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 	  <div class="container container-fluid">
-	    <a class="navbar-brand" href="#">Mail Parser</a>
+	    <a class="navbar-hrand" href="#">Mail Parser</a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -41,44 +41,44 @@
 		</form>
 		<div class="mt-5 d-flex justify-content-between">
 			<div class="">
-				<button class="btn btn-outline-primary" onClick="uploadFile()">Filters</button>
+				<button class="btn btn-outline-primary">Filters</button>
 			</div>
-			<div class="mb-3">
-			  <label for="formFile" class="form-label">New Mail</label>
+			<div class="mb-3 d-flex justify-content-between">
 			  <input id="file_input" class="form-control btn btn-outline-primary" type="file" id="formFile">
+			  <div class="" style="width:20px"></div>
+			  <button class="btn btn-primary" onClick="uploadFile()">Submit</button>
 			</div>
 		</div>
 		<div class="mt-5">
-			<table class="table">
-				<thead>
+			<table class="table rounded align-middle table-striped table-bordered">
+				<thead class="">
 				<tr>
 					<th scope="col">Date</th>
-					<th scope="col">From</th>
+					<th scope="col">From: <hr> To:</th>
 					<th scope="col">pro Number</th>
 					<th scope="col">Loaded miles</th>
-					<th scope="col">Pick up: <br> Delivery:</th>
+					<th scope="col">Pick up</th>
+					<th scope="col">Delivery</th>
 					<th scope="col">additional stops</th>
 					<th scope="col">vehicle size</th>
-					<th scope="col">Max pieces</th>
-					<th scope="col">Max weight</th>
-	  				<th scope="col">Dimensions</th>
-					<th scope="col">stackable</th>
+					<th scope="col">Max_pieces: <hr> Max_weight:</th>
+	  				<th scope="col">Dimensions: <hr> Stackable:</th>
 				</tr>
 				</thead>
 				<tbody>
 				{% for mail in mails %}
 				<tr>
 				  <td>{{mail.date}}</td>
-				  <td>{{mail.source_email}}</td>
+				  <td>{{mail.from_address}} <hr> {{mail.to_address}}</td>
 				  <td>{{mail.pro_number}}</td>
 				  <td>{{mail.loaded_miles}}</td>
 				  <td>{{mail.pickup}}</td>
+				  <td>{{mail.delivery}}</td>
 				  <td>{{mail.no_of_additional_stops}}</td>
 				  <td>{{mail.vehicle_size}}</td>
-				  <td>{{mail.max_pieces}}</td>
-				  <td>{{mail.max_weight}}</td>
-				  <td>{{mail.dimensions}}</td>
-				  <td>{{mail.stackable}}</td>
+				  <td>{{mail.max_pieces}} <hr> {{mail.max_weight}}</td>
+				  <td>{{mail.dimensions}} <hr> {{mail.stackable}}</td>
+				  <td></td>
 				</tr>
 				{% endfor %}
 				</tbody>
@@ -94,8 +94,7 @@
 				 const cookie = cookies[i].trim();
 				 // Does this cookie string begin with the name we want?
 				 if (cookie.substring(0, name.length + 1) === (name + '=')) {
-					 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					 break;
+					 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));					
 				 }
 			 }
 		 }
