@@ -76,3 +76,13 @@ def save_to_database(parsed_dict):
 		stackable = parsed_dict['Â\xa0Â\xa0Â\xa0Â\xa0Stackable'],
 	)
 	new_mail.save()
+
+def mail_detail(request,mail_id):
+	mail = Mail.objects.get(id=mail_id)
+	context = {
+		"mail":mail
+	}
+	return render(request,"mail.html",context)
+
+def settings(request):
+	return render(request,"settings.html")
