@@ -29,7 +29,7 @@ class Settings(models.Model):
 			# if you'll not check for self.pk
 			# then error will also raised in update of exists model
 			raise ValidationError('There is can be only one Settings instance')
-		return super(JuicerBaseSettings, self).save(*args, **kwargs)
+		return super(Settings, self).save(*args, **kwargs)
 
 class Refresh(models.Model):
 	last_refresh = models.DateTimeField()

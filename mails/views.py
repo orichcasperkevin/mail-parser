@@ -1,10 +1,10 @@
+import json
 from datetime import datetime
 from dateutil import parser
 
 from django.shortcuts import render
 from django.http import HttpResponse
-from mails.models import Mail
-
+from mails.models import Mail,Settings
 import mailparser
 # create a function
 def index(request):
@@ -85,4 +85,20 @@ def mail_detail(request,mail_id):
 	return render(request,"mail.html",context)
 
 def settings(request):
-	return render(request,"settings.html")
+	settings = Settings.objects.first()
+	context = {
+		"settings":settings
+	}
+	return render(request,"settings.html",context)
+
+
+def updateSettings(request):
+	if request.method == 'POST':
+		body = json.loads(request.body)
+		settings = Settings.objects.first()
+		settings.user = body['user']
+		settings.password = body['password']
+		settings.imap_url = body['imap_url']
+		settings.from_mail = body['from_mail']
+		settings.save()
+	return HttpResponse(status=201)

@@ -29,32 +29,80 @@
 		<div class="d-flex justify-content-between">
 			<h3>Settings</h3>
 			<div class="">
-				<button class="btn btn-primary">Save</button>
+				<button class="btn btn-primary" onclick="saveSettings()" type="button">
+					<span id="spinner" class="d-none spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+					Save
+				</button>
 			</div>
 		</div>
 		<div class="mt-5 d-flex flex-column">
 			<div class="col-4 d-flex flex-column">
-				<label for="">User email</label>
-				<input type="text" name="" value="" class="form-control bg-light">
-				<small>Your email, use the one you receive the mails you want parsed</small>
+				<label class="text-muted" for="">User email</label>
+				<input id="user" type="text" name="" value="{{settings.user}}" class="form-control bg-light">
+				<small class="text-muted">Your email, use the one you receive the mails you want parsed</small>
 			</div>
 			<div class="mt-4 col-4 d-flex flex-column">
 				<label for="">Password</label>
-				<input type="text" name="" value="" class="form-control  bg-light">
-				<small>Password to the email account entered above</small>
+				<input id="password" type="text" name="" value="{{settings.password}}" class="form-control  bg-light">
+				<small class="text-muted" >Password to the email account entered above</small>
 			</div>
 			<div class="mt-4 col-4 d-flex flex-column">
-				<label for="">IMAP URL</label>
-				<input type="text" name="" value="" class="form-control  bg-light">
-				<small>url for the email provider. eg </small>
+				<label class="text-muted" for="">IMAP URL</label>
+				<input id="imap_url" type="text" name="" value="{{settings.imap_url}}" class="form-control  bg-light">
+				<small class="text-muted">url for the email provider. eg </small>
 			</div>
 			<div class="mt-4 col-4 d-flex flex-column">
-				<label for="">Source mail</label>
-				<input type="text" name="" value="" class="form-control bg-light">
-				<small>Email Account you receive the mails from</small>
+				<label class="text-muted" for="">Source mail</label>
+				<input id="from_mail" type="text" name="" value="{{settings.from_mail}}" class="form-control bg-light">
+				<small class="text-muted" >Email Account you receive the mails from</small>
 			</div>
 		</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		// for csrftoken django
+		function getCookie(name) {
+		 let cookieValue = null;
+		 if (document.cookie && document.cookie !== '') {
+			 const cookies = document.cookie.split(';');
+			 for (let i = 0; i < cookies.length; i++) {
+				 const cookie = cookies[i].trim();
+				 // Does this cookie string begin with the name we want?
+				 if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				 }
+			 }
+		 }
+		 return cookieValue;
+		}
+		var saveSettings = function(){
+			spinner = document.getElementById('spinner')
+			spinner.classList.remove('d-none')
+			url = "/update-settings/"
+			data= {
+				user:document.getElementById('user').value,
+				password:document.getElementById('password').value,
+				imap_url:document.getElementById('imap_url').value,
+				from_mail:document.getElementById('from_mail').value
+			},
+			console.log(data)
+			fetch(url, {
+				method: 'POST',
+				headers: {
+					"X-CSRFToken": getCookie("csrftoken"),
+					'Content-Type': 'text/plain'
+				},
+				body: JSON.stringify(data),
+				}).then((res) => {
+					if (res.status === 201) {
+						alert("successfully saved")
+						spinner.classList.add('d-none')
+					}
+				}).catch((error) => {
+					alert(error)
+					spinner.classList.add('d-none')
+			})
+		}
+	</script>
 </body>
 </html>
